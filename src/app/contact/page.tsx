@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/contact/contact-form";
 import { Container } from "@/components/ui/container";
+import { Reveal } from "@/components/ui/reveal";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -41,16 +42,16 @@ export default function ContactPage() {
     <>
       <section className="page-hero border-b border-[color:var(--line)] bg-white">
         <Container className="grid items-end gap-hero lg:grid-cols-[minmax(0,1.5fr)_minmax(320px,0.65fr)]">
-          <div>
+          <Reveal>
             <p className="mb-[var(--eyebrow-gap)] font-display text-[0.69rem] font-bold tracking-[0.14em] text-muted uppercase">
               Project enquiries
             </p>
             <h1 className="m-0 max-w-[12ch] font-display text-[clamp(3.1rem,6.4vw,5.8rem)] font-semibold leading-[0.97] tracking-[-0.07em] text-navy">
               Tell us what you need to test.
             </h1>
-          </div>
+          </Reveal>
 
-          <div>
+          <Reveal delay={100}>
             <p className="mb-[30px] m-0 text-[1.06rem] leading-[1.7] text-ink-soft">
               The most useful starting point is specific: what needs testing,
               the sample type, number of samples, required result and timing.
@@ -72,15 +73,17 @@ export default function ContactPage() {
                 ↗
               </i>
             </a>
-          </div>
+          </Reveal>
         </Container>
       </section>
 
       <section className="section bg-paper">
         <Container className="grid items-start gap-layout lg:grid-cols-[minmax(0,1.25fr)_minmax(280px,0.55fr)]">
-          <ContactForm />
+          <Reveal>
+            <ContactForm />
+          </Reveal>
 
-          <aside className="grid gap-10 sm:grid-cols-2 sm:gap-8 lg:grid-cols-1 lg:gap-14">
+          <Reveal delay={120} as="aside" className="grid gap-10 sm:grid-cols-2 sm:gap-8 lg:grid-cols-1 lg:gap-14">
             <div className="sm:col-span-2 lg:col-span-1">
               <p className="mb-[var(--eyebrow-gap)] font-display text-[0.69rem] font-bold tracking-[0.14em] text-muted uppercase">
                 Before you write
@@ -124,22 +127,22 @@ export default function ContactPage() {
                 {site.email} <span aria-hidden="true">↗</span>
               </a>
             </div>
-          </aside>
+          </Reveal>
         </Container>
       </section>
 
       <section className="section bg-white">
         <Container className="grid items-start gap-layout lg:grid-cols-[minmax(280px,0.75fr)_minmax(0,1.25fr)]">
-          <div>
+          <Reveal>
             <p className="mb-[var(--eyebrow-gap)] font-display text-[0.69rem] font-bold tracking-[0.14em] text-muted uppercase">
               Common questions
             </p>
             <h2 className="m-0 max-w-[10ch] font-display text-[clamp(2.3rem,4.4vw,4.3rem)] font-semibold leading-[1.04] tracking-[-0.045em] text-navy">
               Useful context before a project starts.
             </h2>
-          </div>
+          </Reveal>
 
-          <div className="border-t border-navy">
+          <Reveal delay={80} className="border-t border-navy">
             {faqs.map((item, index) => (
               <details
                 key={item.q}
@@ -158,7 +161,7 @@ export default function ContactPage() {
                 </p>
               </details>
             ))}
-          </div>
+          </Reveal>
         </Container>
       </section>
     </>

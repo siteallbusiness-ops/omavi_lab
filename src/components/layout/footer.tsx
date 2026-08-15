@@ -2,15 +2,15 @@ import Link from "next/link";
 import { Brand } from "@/components/layout/brand";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Container } from "@/components/ui/container";
+import { Reveal } from "@/components/ui/reveal";
 import { footerNavLinks, site } from "@/lib/site";
 
 export function Footer() {
   return (
     <footer className="bg-navy text-white">
       <Container>
-        {/* CTA band */}
         <div className="flex flex-col items-start gap-8 border-b border-white/14 py-[var(--section-y)] md:grid md:grid-cols-[minmax(0,1fr)_auto] md:items-end md:gap-[60px]">
-          <div>
+          <Reveal>
             <p className="mb-[var(--eyebrow-gap)] font-display text-[0.68rem] font-bold tracking-[0.14em] text-blue-mist uppercase">
               Start with the analytical question
             </p>
@@ -19,18 +19,19 @@ export function Footer() {
               <br className="hidden sm:block" />
               to know about the sample.
             </h2>
-          </div>
-          <ButtonLink
-            href={`mailto:${site.email}`}
-            variant="light"
-            external
-            className="w-full shrink-0 justify-center sm:w-auto md:justify-self-end"
-          >
-            Email the laboratory <span aria-hidden="true">↗</span>
-          </ButtonLink>
+          </Reveal>
+          <Reveal delay={100}>
+            <ButtonLink
+              href={`mailto:${site.email}`}
+              variant="light"
+              external
+              className="w-full shrink-0 justify-center sm:w-auto md:justify-self-end"
+            >
+              Email the laboratory <span aria-hidden="true">↗</span>
+            </ButtonLink>
+          </Reveal>
         </div>
 
-        {/* Columns */}
         <div className="grid gap-10 py-[var(--section-y-compact)] sm:grid-cols-2 sm:gap-12 md:grid-cols-[1.7fr_0.65fr_0.8fr] md:gap-[clamp(3rem,9vw,8rem)]">
           <div className="sm:col-span-2 md:col-span-1">
             <Brand size="lg" />
@@ -78,7 +79,6 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Bottom bar */}
         <div className="flex min-h-[68px] flex-col justify-center gap-2 border-t border-white/14 py-5 text-[0.63rem] text-white/40 sm:gap-3 md:flex-row md:items-center md:justify-between md:gap-[30px]">
           <p className="m-0">
             © {site.year} {site.name}.

@@ -124,14 +124,42 @@ export function PricingCatalog() {
                     </small>
                   </summary>
 
-                  <div className="-mx-1 w-[calc(100%+8px)] max-w-[calc(100%+8px)] overflow-x-auto pb-[30px] sm:mx-0 sm:w-full sm:max-w-full">
-                    <table className="w-full min-w-[480px] border-collapse bg-white/[0.34] tabular-nums sm:min-w-0">
+                  <div className="pb-[30px]">
+                    {/* Mobile: stacked rows — no horizontal scroll */}
+                    <div className="overflow-hidden rounded-md border border-[color:var(--line)] bg-white/50 sm:hidden">
+                      <div className="flex items-center justify-between gap-3 bg-[rgba(203,213,225,0.45)] px-3.5 py-2.5">
+                        <span className="font-display text-[0.62rem] font-bold tracking-[0.08em] text-blue uppercase">
+                          {category.columnLabel ?? "Analyte"}
+                        </span>
+                        <span className="font-display text-[0.62rem] font-bold tracking-[0.08em] text-blue uppercase">
+                          Fee (USD)
+                        </span>
+                      </div>
+                      <ul className="m-0 list-none p-0">
+                        {category.rows.map((row) => (
+                          <li
+                            key={row.analyte}
+                            className="flex items-baseline justify-between gap-4 border-b border-[color:var(--line)] px-3.5 py-3.5 last:border-b-0"
+                          >
+                            <span className="min-w-0 text-[0.84rem] leading-snug text-ink-soft">
+                              {row.analyte}
+                            </span>
+                            <span className="shrink-0 font-display text-[0.88rem] font-semibold tabular-nums text-navy">
+                              {row.fee}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Desktop / tablet table */}
+                    <table className="hidden w-full border-collapse bg-white/[0.34] tabular-nums sm:table">
                       <thead>
                         <tr>
-                          <th className="bg-[rgba(203,213,225,0.45)] px-3 py-[13px] text-left font-display text-[0.62rem] font-bold tracking-[0.08em] text-blue uppercase sm:px-[18px]">
+                          <th className="bg-[rgba(203,213,225,0.45)] px-[18px] py-[13px] text-left font-display text-[0.62rem] font-bold tracking-[0.08em] text-blue uppercase">
                             {category.columnLabel ?? "Analyte"}
                           </th>
-                          <th className="w-[120px] bg-[rgba(203,213,225,0.45)] px-3 py-[13px] text-right font-display text-[0.62rem] font-bold tracking-[0.08em] text-blue uppercase sm:w-[190px] sm:px-[18px]">
+                          <th className="w-[160px] bg-[rgba(203,213,225,0.45)] px-[18px] py-[13px] text-right font-display text-[0.62rem] font-bold tracking-[0.08em] text-blue uppercase md:w-[190px]">
                             Testing fee (USD)
                           </th>
                         </tr>
@@ -142,10 +170,10 @@ export function PricingCatalog() {
                             key={row.analyte}
                             className="transition-colors hover:bg-blue-soft/40 [&:last-child_td]:border-b-0"
                           >
-                            <td className="border-b border-[color:var(--line)] px-3 py-3 text-[0.82rem] text-ink-soft sm:px-[18px] sm:py-[13px]">
+                            <td className="border-b border-[color:var(--line)] px-[18px] py-[13px] text-[0.82rem] text-ink-soft">
                               {row.analyte}
                             </td>
-                            <td className="border-b border-[color:var(--line)] px-3 py-3 text-right font-display text-[0.82rem] font-semibold text-ink sm:px-[18px] sm:py-[13px]">
+                            <td className="border-b border-[color:var(--line)] px-[18px] py-[13px] text-right font-display text-[0.82rem] font-semibold text-ink">
                               {row.fee}
                             </td>
                           </tr>

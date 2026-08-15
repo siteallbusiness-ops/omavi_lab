@@ -1,6 +1,7 @@
 import { ButtonLink, TextLink } from "@/components/ui/button-link";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/eyebrow";
+import { Reveal } from "@/components/ui/reveal";
 import { cn } from "@/lib/utils";
 
 export function PageHero({
@@ -26,7 +27,7 @@ export function PageHero({
       )}
     >
       <Container className="grid items-end gap-hero md:grid-cols-[minmax(0,1.5fr)_minmax(280px,0.65fr)]">
-        <div>
+        <Reveal>
           <Eyebrow>{eyebrow}</Eyebrow>
           <h1 className="m-0 max-w-[850px] font-display text-[clamp(3.1rem,6.4vw,5.4rem)] font-semibold leading-[0.97] tracking-[-0.07em] text-navy">
             {title}
@@ -37,8 +38,12 @@ export function PageHero({
           {actions ? (
             <div className="mt-8 flex flex-wrap items-center gap-5">{actions}</div>
           ) : null}
-        </div>
-        {meta ? <div className="md:justify-self-stretch">{meta}</div> : null}
+        </Reveal>
+        {meta ? (
+          <Reveal delay={100} variant="fade" className="md:justify-self-stretch">
+            {meta}
+          </Reveal>
+        ) : null}
       </Container>
     </section>
   );

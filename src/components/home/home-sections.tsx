@@ -1,5 +1,6 @@
 import { ButtonLink, TextLink } from "@/components/ui/button-link";
 import { Container } from "@/components/ui/container";
+import { Reveal, RevealItem } from "@/components/ui/reveal";
 import { CertificateViewer } from "@/components/home/certificate-viewer";
 import { MicroscopeVisual } from "@/components/home/microscope-visual";
 
@@ -81,14 +82,20 @@ export function HomeSections() {
         aria-label="Core testing commitments"
       >
         <Container className="grid md:grid-cols-5">
-          <div className="border-b border-[color:var(--line)] py-12 md:border-r md:border-b-0 md:py-14 md:pr-7">
+          <Reveal
+            as="div"
+            variant="fade"
+            className="border-b border-[color:var(--line)] py-12 md:border-r md:border-b-0 md:py-14 md:pr-7"
+          >
             <p className="m-0 max-w-[9rem] font-display text-[0.68rem] font-bold leading-4 tracking-[0.14em] text-navy uppercase">
               What the work is built around
             </p>
-          </div>
+          </Reveal>
           {pillars.map((item, index) => (
-            <article
+            <RevealItem
               key={item.title}
+              as="article"
+              index={index + 1}
               className={`border-b border-[color:var(--line)] py-12 md:border-b-0 md:px-6 md:py-14 ${
                 index < pillars.length - 1 ? "md:border-r" : ""
               }`}
@@ -97,14 +104,14 @@ export function HomeSections() {
                 {item.title}
               </h3>
               <p className="mt-3 m-0 text-sm leading-6 text-muted">{item.body}</p>
-            </article>
+            </RevealItem>
           ))}
         </Container>
       </section>
 
       <section className="section bg-white">
         <Container>
-          <div className="mb-[clamp(50px,7vw,72px)] grid items-end gap-split border-b border-[color:var(--line)] pb-12 md:mb-0 md:grid-cols-[1.2fr_0.8fr] md:border-0 md:pb-0">
+          <Reveal className="mb-[clamp(50px,7vw,72px)] grid items-end gap-split border-b border-[color:var(--line)] pb-12 md:mb-0 md:grid-cols-[1.2fr_0.8fr] md:border-0 md:pb-0">
             <div>
               <p className="mb-[var(--eyebrow-gap)] font-display text-[0.68rem] font-bold tracking-[0.14em] text-muted uppercase">
                 Focused analytical services
@@ -118,12 +125,14 @@ export function HomeSections() {
               required output—not a one-size-fits-all package. We define the
               scope first, then align the method and report.
             </p>
-          </div>
+          </Reveal>
 
           <div className="mt-0 border-t border-[color:var(--line)] md:mt-12">
-            {services.map((service) => (
-              <article
+            {services.map((service, index) => (
+              <RevealItem
                 key={service.index}
+                as="article"
+                index={index}
                 className="grid gap-4 border-b border-[color:var(--line)] py-8 sm:gap-5 sm:py-10 md:grid-cols-[48px_minmax(0,1.05fr)_minmax(0,1.15fr)_auto] md:items-start md:gap-8 md:py-12 lg:grid-cols-[64px_minmax(0,1.05fr)_minmax(0,1.15fr)_auto] lg:gap-10"
               >
                 <div className="font-display text-sm tracking-[0.08em] text-muted">
@@ -146,21 +155,21 @@ export function HomeSections() {
                 >
                   View fees <span aria-hidden="true">↗</span>
                 </TextLink>
-              </article>
+              </RevealItem>
             ))}
           </div>
         </Container>
       </section>
 
       <section className="section relative overflow-hidden bg-navy text-white">
-        <div className="pointer-events-none absolute inset-0 opacity-30">
+        <div className="pointer-events-none absolute inset-0 opacity-30" aria-hidden="true">
           <div className="absolute top-[-20%] left-[35%] size-[700px] rounded-full border border-blue/25" />
           <div className="absolute top-[10%] left-[48%] size-[820px] rounded-full border border-white/8" />
         </div>
 
         <Container className="relative z-10">
           <div className="process-intro mb-[clamp(42px,8vw,96px)] grid items-center gap-layout lg:grid-cols-[minmax(0,1fr)_minmax(390px,0.72fr)]">
-            <div className="max-w-xl">
+            <Reveal variant="left" className="max-w-xl">
               <p className="mb-[var(--eyebrow-gap)] font-display text-[0.68rem] font-bold tracking-[0.14em] text-blue-mist uppercase">
                 A clear path from sample to report
               </p>
@@ -172,20 +181,30 @@ export function HomeSections() {
                 measured, how it will be reported and what the result can—and
                 cannot—say.
               </p>
-            </div>
-            <div className="min-w-0 w-full self-stretch lg:justify-self-end lg:w-[min(100%,720px)]">
+            </Reveal>
+            <Reveal
+              variant="right"
+              delay={120}
+              className="min-w-0 w-full self-stretch lg:justify-self-end lg:w-[min(100%,720px)]"
+            >
               <MicroscopeVisual />
-            </div>
+            </Reveal>
           </div>
 
           <ol className="m-0 grid list-none grid-cols-1 border-t border-white/14 p-0 sm:grid-cols-2 lg:grid-cols-4">
             {workflow.map((step, index) => (
-              <li
+              <RevealItem
                 key={step.index}
+                as="li"
+                index={index}
                 className={`flex min-h-[200px] flex-col border-b border-white/14 px-0 py-6 sm:min-h-[240px] sm:border-b-0 sm:px-6 sm:py-7 lg:min-h-[280px] lg:px-7 ${
-                  index < workflow.length - 1 ? "lg:border-r lg:border-white/14" : ""
+                  index < workflow.length - 1
+                    ? "lg:border-r lg:border-white/14"
+                    : ""
                 } ${index % 2 === 0 ? "sm:border-r sm:border-white/14" : "sm:border-r-0"} ${
-                  index < 2 ? "sm:border-b sm:border-white/14 lg:border-b-0" : ""
+                  index < 2
+                    ? "sm:border-b sm:border-white/14 lg:border-b-0"
+                    : ""
                 } ${index === 0 ? "sm:pl-0" : ""} ${index === workflow.length - 1 ? "lg:pr-0" : ""} ${
                   index === 2 ? "sm:pl-0 lg:pl-7" : ""
                 }`}
@@ -199,7 +218,7 @@ export function HomeSections() {
                 <p className="m-0 text-[0.85rem] leading-[1.62] text-white/62">
                   {step.body}
                 </p>
-              </li>
+              </RevealItem>
             ))}
           </ol>
         </Container>
@@ -207,7 +226,7 @@ export function HomeSections() {
 
       <section className="section bg-white">
         <Container className="grid items-center gap-layout lg:grid-cols-[minmax(280px,0.75fr)_minmax(0,1.25fr)]">
-          <div>
+          <Reveal variant="left">
             <p className="mb-[var(--eyebrow-gap)] font-display text-[0.68rem] font-bold tracking-[0.14em] text-muted uppercase">
               Public certificate lookup
             </p>
@@ -240,29 +259,38 @@ export function HomeSections() {
             <ButtonLink href="/coa-lookup">
               COA Lookup <span aria-hidden="true">↗</span>
             </ButtonLink>
-          </div>
+          </Reveal>
 
-          <CertificateViewer />
+          <Reveal variant="right" delay={140}>
+            <CertificateViewer />
+          </Reveal>
         </Container>
       </section>
 
       <section className="section border-t border-[color:var(--line)] bg-paper">
         <Container className="grid items-start gap-8 sm:gap-10 md:grid-cols-[minmax(0,0.7fr)_minmax(0,1.6fr)] md:gap-split lg:grid-cols-[0.7fr_1.6fr_0.9fr]">
-          <p className="m-0 max-w-[8.5rem] font-display text-[0.68rem] font-bold leading-4 tracking-[0.14em] text-navy uppercase">
-            Professional confidence is specific
-          </p>
-          <blockquote className="m-0 font-display text-[clamp(1.55rem,5.5vw,2.55rem)] font-semibold leading-[1.15] tracking-[-0.035em] text-navy">
-            “The method, scope and certificate reference should be as clear as
-            the result itself.”
-          </blockquote>
-          <div className="md:col-span-2 lg:col-span-1 lg:justify-self-end">
+          <Reveal variant="fade">
+            <p className="m-0 max-w-[8.5rem] font-display text-[0.68rem] font-bold leading-4 tracking-[0.14em] text-navy uppercase">
+              Professional confidence is specific
+            </p>
+          </Reveal>
+          <Reveal delay={80}>
+            <blockquote className="m-0 font-display text-[clamp(1.55rem,5.5vw,2.55rem)] font-semibold leading-[1.15] tracking-[-0.035em] text-navy">
+              “The method, scope and certificate reference should be as clear as
+              the result itself.”
+            </blockquote>
+          </Reveal>
+          <Reveal
+            delay={140}
+            className="md:col-span-2 lg:col-span-1 lg:justify-self-end"
+          >
             <TextLink
               href="/contact"
               className="border-b border-navy pb-2 text-navy hover:border-blue hover:text-blue"
             >
               Discuss a testing scope <span aria-hidden="true">→</span>
             </TextLink>
-          </div>
+          </Reveal>
         </Container>
       </section>
     </>

@@ -115,11 +115,12 @@ function AnalyticalRecord() {
           <div
             key={index}
             className={[
-              "flex min-h-[110px] flex-col px-3.5 py-4 sm:min-h-[128px] sm:px-[17px] sm:py-5",
+              "animate-fade-up flex min-h-[110px] flex-col px-3.5 py-4 sm:min-h-[128px] sm:px-[17px] sm:py-5",
               i % 2 === 0 ? "border-r border-white/18" : "",
               i < 2 ? "border-b border-white/18 min-[720px]:border-b-0" : "",
               i < 3 ? "min-[720px]:border-r min-[720px]:border-white/18" : "",
             ].join(" ")}
+            style={{ animationDelay: `${0.35 + i * 0.08}s` }}
           >
             <span className="mb-auto font-display text-[0.64rem] tracking-[0.08em] text-blue-mist">
               {index}
@@ -141,11 +142,11 @@ export function HomeHero() {
   return (
     <section className="page-hero overflow-hidden border-b border-[color:var(--line)] bg-white">
       <Container className="grid items-center gap-layout lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-        <div className="animate-fade-up max-w-xl">
-          <p className="mb-[var(--eyebrow-gap)] font-display text-[0.69rem] font-bold tracking-[0.16em] text-muted uppercase">
+        <div className="max-w-xl">
+          <p className="animate-fade-up mb-[var(--eyebrow-gap)] font-display text-[0.69rem] font-bold tracking-[0.16em] text-muted uppercase">
             Peptide & specialty compound analysis
           </p>
-          <h1 className="m-0 font-display text-[clamp(2.85rem,6.4vw,5rem)] font-semibold leading-[0.98] tracking-[-0.045em] text-navy">
+          <h1 className="animate-fade-up-delay m-0 font-display text-[clamp(2.85rem,6.4vw,5rem)] font-semibold leading-[0.98] tracking-[-0.045em] text-navy">
             Analytical
             <br />
             testing
@@ -154,13 +155,13 @@ export function HomeHero() {
             <br />
             verify.
           </h1>
-          <p className="mt-7 max-w-[34rem] text-[1.05rem] leading-8 text-ink-soft">
+          <p className="animate-fade-up-delay-2 mt-7 max-w-[34rem] text-[1.05rem] leading-8 text-ink-soft">
             {site.name} supports supplement, nutraceutical and research samples
             with identity, purity and quantity testing. Results are delivered
             through clear, batch-level reporting you can review, share and
             retrieve.
           </p>
-          <div className="mt-8 flex flex-wrap items-center gap-5">
+          <div className="animate-fade-up-delay-3 mt-8 flex flex-wrap items-center gap-5">
             <ButtonLink href="/testing-techniques">
               Explore testing <span aria-hidden="true">↗</span>
             </ButtonLink>

@@ -216,7 +216,7 @@ body {
 @keyframes fade-up {
   from {
     opacity: 0;
-    transform: translateY(18px);
+    transform: translateY(16px);
   }
   to {
     opacity: 1;
@@ -246,15 +246,19 @@ body {
 }
 
 .animate-fade-up {
-  animation: fade-up 0.7s ease both;
+  animation: fade-up 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .animate-fade-up-delay {
-  animation: fade-up 0.8s ease 0.12s both;
+  animation: fade-up 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
 }
 
 .animate-fade-up-delay-2 {
-  animation: fade-up 0.85s ease 0.22s both;
+  animation: fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.22s both;
+}
+
+.animate-fade-up-delay-3 {
+  animation: fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.32s both;
 }
 
 .trace-line {
@@ -264,6 +268,60 @@ body {
 
 .status-pulse {
   animation: pulse-dot 2.4s ease-in-out infinite;
+}
+
+/* ——— Scroll reveals (layout-safe: opacity + translate only) ——— */
+.reveal {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.reveal--fade {
+  transform: none;
+}
+
+.reveal--left {
+  transform: translate3d(-16px, 0, 0);
+}
+
+.reveal--right {
+  transform: translate3d(16px, 0, 0);
+}
+
+.reveal--up {
+  transform: translate3d(0, 18px, 0);
+}
+
+.reveal--in {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  will-change: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up,
+  .animate-fade-up-delay,
+  .animate-fade-up-delay-2,
+  .animate-fade-up-delay-3,
+  .trace-line,
+  .status-pulse {
+    animation: none !important;
+  }
+
+  .reveal,
+  .reveal--fade,
+  .reveal--left,
+  .reveal--right,
+  .reveal--up {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    will-change: auto !important;
+  }
 }
 
 /* DNA helix — entrance + continuous glow / spin feel */

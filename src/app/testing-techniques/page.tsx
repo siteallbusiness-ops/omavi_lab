@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ButtonLink, TextLink } from "@/components/ui/button-link";
 import { Container } from "@/components/ui/container";
+import { Reveal } from "@/components/ui/reveal";
 import { CapabilityMap } from "@/components/testing/capability-map";
 
 export const metadata: Metadata = {
@@ -141,7 +142,7 @@ export default function TestingTechniquesPage() {
       {/* Hero */}
       <section className="page-hero border-b border-[color:var(--line)] bg-white">
         <Container className="grid items-end gap-hero lg:grid-cols-[minmax(0,1.5fr)_minmax(280px,0.65fr)]">
-          <div>
+          <Reveal>
             <p className="mb-[var(--eyebrow-gap)] font-display text-[0.69rem] font-bold tracking-[0.14em] text-muted uppercase">
               Testing Techniques
             </p>
@@ -152,8 +153,8 @@ export default function TestingTechniquesPage() {
               <br />
               question.
             </h1>
-          </div>
-          <div>
+          </Reveal>
+          <Reveal delay={100}>
             <p className="mb-7 m-0 text-[1.06rem] leading-[1.7] text-ink-soft">
               From peptide identity and purity to targeted compound analysis and
               supplementary screening, every project begins by confirming what
@@ -165,7 +166,7 @@ export default function TestingTechniquesPage() {
             >
               Discuss your sample <span aria-hidden="true">→</span>
             </TextLink>
-          </div>
+          </Reveal>
         </Container>
       </section>
 
