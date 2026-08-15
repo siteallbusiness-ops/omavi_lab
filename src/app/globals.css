@@ -1,26 +1,542 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Brand */
+  --navy: #091628;
+  --blue: #1e5bd9;
+  --blue-hover: #1748b3;
+  --blue-soft: #e8effc;
+  --blue-mist: #b7cdf7;
+
+  /* Surfaces & text */
+  --ink: #091628;
+  --ink-soft: #2c4058;
+  --muted: #5f7188;
+  --paper: #f3f6fb;
+  --paper-deep: #dde5f2;
+  --white: #ffffff;
+  --surface: #091628;
+  --surface-soft: #13283f;
+  --accent: #1e5bd9;
+  --accent-soft: #e8effc;
+  --line: rgba(9, 22, 40, 0.14);
+  --line-light: rgba(255, 255, 255, 0.16);
+  --shadow: 0 24px 70px rgba(9, 22, 40, 0.14);
+  --background: var(--paper);
+  --foreground: var(--ink);
+
+  /* Layout rhythm */
+  --container: 1280px;
+  --page-hero-y: clamp(76px, 9vw, 126px);
+  --section-y: clamp(84px, 10vw, 144px);
+  --section-y-compact: clamp(64px, 8vw, 110px);
+  --gap-hero: clamp(60px, 11vw, 170px);
+  --gap-layout: clamp(54px, 9vw, 130px);
+  --gap-split: clamp(40px, 8vw, 120px);
+  --gap-content: clamp(28px, 4vw, 48px);
+  --eyebrow-gap: 1.25rem;
+  --header-h: 82px;
+  --sticky-top: calc(var(--header-h) + 12px);
+  --scroll-margin: 110px;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-muted: var(--muted);
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-white: var(--white);
+  --color-surface: var(--surface);
+  --color-surface-soft: var(--surface-soft);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-navy: var(--navy);
+  --color-blue: var(--blue);
+  --color-blue-hover: var(--blue-hover);
+  --color-blue-soft: var(--blue-soft);
+  --color-blue-mist: var(--blue-mist);
+  --font-sans: var(--font-dm-sans);
+  --font-display: var(--font-manrope);
+  --shadow-elevated: var(--shadow);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--scroll-margin);
 }
 
 body {
-  background: var(--background);
+  margin: 0;
+  overflow-x: clip;
+  background:
+    radial-gradient(1200px 520px at 8% -10%, rgba(30, 91, 217, 0.08), transparent 55%),
+    radial-gradient(900px 480px at 100% 0%, rgba(9, 22, 40, 0.05), transparent 50%),
+    var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
+
+#main-content {
+  min-height: 60vh;
+}
+
+/* Shared page rhythm */
+.page-hero {
+  padding-block: var(--page-hero-y);
+}
+
+.section {
+  padding-block: var(--section-y);
+}
+
+.section--compact {
+  padding-block: var(--section-y-compact);
+}
+
+.gap-hero {
+  gap: var(--gap-hero);
+}
+
+.gap-layout {
+  gap: var(--gap-layout);
+}
+
+.gap-split {
+  gap: var(--gap-split);
+}
+
+.scroll-target {
+  scroll-margin-top: var(--scroll-margin);
+}
+
+/* ——— Responsive rhythm ——— */
+@media (max-width: 1024px) {
+  :root {
+    --gap-hero: clamp(48px, 8vw, 80px);
+    --gap-layout: clamp(40px, 7vw, 72px);
+    --scroll-margin: 120px;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --header-h: 74px;
+    --page-hero-y: 58px 70px;
+    --section-y: clamp(64px, 12vw, 96px);
+    --section-y-compact: clamp(48px, 10vw, 80px);
+    --gap-hero: 50px;
+    --gap-layout: 42px;
+    --gap-split: 36px;
+    --sticky-top: calc(var(--header-h) + 8px);
+    --scroll-margin: 100px;
+  }
+
+  .page-hero h1 {
+    font-size: clamp(2.6rem, 12vw, 4rem);
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --page-hero-y: 52px 64px;
+    --gap-hero: 40px;
+    --gap-layout: 36px;
+  }
+}
+
+/* Mobile navigation panel */
+.mobile-nav-panel {
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.mobile-nav-panel--open {
+  opacity: 1;
+}
+
+.mobile-nav-panel--closed {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-nav-panel {
+    transition: none !important;
+  }
+}
+
+/* Soft DNA watermark — single helix, faded toward edges */
+.mobile-nav-dna {
+  -webkit-mask-image: radial-gradient(
+    ellipse 70% 80% at 78% 42%,
+    #000 15%,
+    transparent 72%
+  );
+  mask-image: radial-gradient(
+    ellipse 70% 80% at 78% 42%,
+    #000 15%,
+    transparent 72%
+  );
+}
+
+::selection {
+  color: var(--white);
+  background: var(--blue);
+}
+
+:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 4px;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes draw-trace {
+  from {
+    stroke-dashoffset: 1200;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.7s ease both;
+}
+
+.animate-fade-up-delay {
+  animation: fade-up 0.8s ease 0.12s both;
+}
+
+.animate-fade-up-delay-2 {
+  animation: fade-up 0.85s ease 0.22s both;
+}
+
+.trace-line {
+  stroke-dasharray: 1200;
+  animation: draw-trace 1.8s ease 0.35s both;
+}
+
+.status-pulse {
+  animation: pulse-dot 2.4s ease-in-out infinite;
+}
+
+/* DNA helix — entrance + continuous glow / spin feel */
+@keyframes dna-draw {
+  from {
+    stroke-dashoffset: 1100;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes dna-flow {
+  to {
+    stroke-dashoffset: -220;
+  }
+}
+
+@keyframes dna-rung-in {
+  from {
+    opacity: 0;
+    transform: scaleX(0.2);
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes dna-node-in {
+  from {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes dna-node-pulse {
+  0%,
+  100% {
+    opacity: 0.75;
+    filter: drop-shadow(0 0 0 rgba(30, 91, 217, 0));
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 6px rgba(142, 192, 255, 0.85));
+  }
+}
+
+@keyframes dna-spin {
+  0%,
+  100% {
+    transform: perspective(600px) rotateY(-8deg) scaleX(0.96);
+  }
+  50% {
+    transform: perspective(600px) rotateY(8deg) scaleX(1);
+  }
+}
+
+@keyframes dna-grid-drift {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-22px);
+  }
+}
+
+.dna-helix {
+  display: grid;
+  place-items: center;
+  width: 100%;
+}
+
+.dna-helix__svg {
+  transform-origin: center center;
+}
+
+.dna-helix--ready .dna-helix__scene {
+  animation: dna-spin 8s ease-in-out infinite;
+  transform-origin: 105px 150px;
+  transform-box: fill-box;
+}
+
+.dna-helix__strand {
+  stroke-dasharray: 1100;
+  stroke-dashoffset: 1100;
+}
+
+.dna-helix--ready .dna-helix__strand--a {
+  animation: dna-draw 1.45s cubic-bezier(0.35, 0, 0.2, 1) 0.15s both;
+}
+
+.dna-helix--ready .dna-helix__strand--b {
+  animation: dna-draw 1.45s cubic-bezier(0.35, 0, 0.2, 1) 0.28s both;
+}
+
+.dna-helix__flow {
+  stroke-dasharray: 16 28;
+  stroke-dashoffset: 0;
+  opacity: 0;
+}
+
+.dna-helix--ready .dna-helix__flow--a {
+  animation:
+    dna-flow-fade 0.4s ease 1.5s both,
+    dna-flow 3.8s linear 1.5s infinite;
+}
+
+.dna-helix--ready .dna-helix__flow--b {
+  animation:
+    dna-flow-fade 0.4s ease 1.65s both,
+    dna-flow 4.4s linear 1.65s infinite reverse;
+}
+
+@keyframes dna-flow-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.dna-helix__rung {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scaleX(0.2);
+}
+
+.dna-helix--ready .dna-helix__rung {
+  animation: dna-rung-in 0.65s cubic-bezier(0.2, 0.75, 0.25, 1) both;
+}
+
+.dna-helix__node {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(0.2);
+}
+
+.dna-helix--ready .dna-helix__node {
+  animation:
+    dna-node-in 0.55s cubic-bezier(0.2, 0.75, 0.25, 1) both,
+    dna-node-pulse 2.6s ease-in-out infinite;
+}
+
+.dna-helix--ready .dna-helix__node--cross {
+  animation:
+    dna-node-in 0.5s ease both,
+    dna-node-pulse 3.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dna-helix--ready .dna-helix__scene,
+  .dna-helix--ready .dna-helix__strand--a,
+  .dna-helix--ready .dna-helix__strand--b,
+  .dna-helix--ready .dna-helix__flow--a,
+  .dna-helix--ready .dna-helix__flow--b,
+  .dna-helix--ready .dna-helix__rung,
+  .dna-helix--ready .dna-helix__node,
+  .dna-helix--ready .dna-helix__node--cross {
+    animation: none !important;
+  }
+
+  .dna-helix__strand,
+  .dna-helix__flow,
+  .dna-helix__rung,
+  .dna-helix__node {
+    opacity: 1;
+    stroke-dashoffset: 0;
+    transform: none;
+  }
+}
+
+/* Microscope analytical workflow visual */
+@keyframes scope-arm-draw {
+  from {
+    stroke-dashoffset: 420;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes scope-light-pulse {
+  0%,
+  100% {
+    opacity: 0.72;
+    filter: drop-shadow(0 0 0 rgba(30, 91, 217, 0));
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 10px rgba(30, 91, 217, 0.85));
+  }
+}
+
+@keyframes scope-focus-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes scope-leader-in {
+  from {
+    stroke-dashoffset: 140;
+    opacity: 0;
+  }
+  to {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes scope-dot-in {
+  from {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes scope-slide-glow {
+  0%,
+  100% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.microscope-arm {
+  stroke-dasharray: 420;
+  stroke-dashoffset: 420;
+  animation: scope-arm-draw 1.4s cubic-bezier(0.35, 0, 0.2, 1) 0.2s both;
+}
+
+.microscope-light {
+  animation: scope-light-pulse 2.8s ease-in-out 1.2s infinite;
+}
+
+.microscope-focus-dial {
+  transform-origin: 314px 132px;
+  animation: scope-focus-spin 12s linear 1.5s infinite;
+}
+
+.microscope-slide {
+  animation: scope-slide-glow 3.2s ease-in-out 1s infinite;
+}
+
+.microscope-leader {
+  stroke-dasharray: 140;
+  stroke-dashoffset: 140;
+  animation: scope-leader-in 0.7s ease both;
+}
+
+.microscope-dot {
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+  animation: scope-dot-in 0.45s cubic-bezier(0.2, 0.75, 0.25, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .microscope-arm,
+  .microscope-light,
+  .microscope-focus-dial,
+  .microscope-slide,
+  .microscope-leader,
+  .microscope-dot {
+    animation: none !important;
+  }
+
+  .microscope-arm,
+  .microscope-leader {
+    stroke-dashoffset: 0;
+  }
+
+  .microscope-dot {
+    opacity: 1;
+  }
+}
+
