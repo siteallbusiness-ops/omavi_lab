@@ -221,7 +221,7 @@ export function MicroscopeVisual() {
             x="420"
             y="62"
             fill="rgba(255,255,255,0.46)"
-            fontFamily="var(--font-manrope), Manrope, sans-serif"
+            fontFamily="var(--font-space-grotesk), Space Grotesk, sans-serif"
             fontSize="8"
             letterSpacing="0.12em"
           >
@@ -248,7 +248,7 @@ export function MicroscopeVisual() {
             x="420"
             y="192"
             fill="rgba(255,255,255,0.46)"
-            fontFamily="var(--font-manrope), Manrope, sans-serif"
+            fontFamily="var(--font-space-grotesk), Space Grotesk, sans-serif"
             fontSize="8"
             letterSpacing="0.12em"
           >
@@ -275,7 +275,7 @@ export function MicroscopeVisual() {
             x="420"
             y="242"
             fill="rgba(255,255,255,0.46)"
-            fontFamily="var(--font-manrope), Manrope, sans-serif"
+            fontFamily="var(--font-space-grotesk), Space Grotesk, sans-serif"
             fontSize="8"
             letterSpacing="0.12em"
           >

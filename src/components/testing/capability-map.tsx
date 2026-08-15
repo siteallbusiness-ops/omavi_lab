@@ -22,6 +22,17 @@ export function CapabilityMap() {
 
     if (!sections.length) return;
 
+    function readAnchorOffset() {
+      const probe = document.createElement("div");
+      probe.className = "techniques-anchor";
+      probe.style.cssText =
+        "position:absolute;visibility:hidden;pointer-events:none;";
+      document.body.appendChild(probe);
+      const px = Number.parseFloat(getComputedStyle(probe).scrollMarginTop);
+      probe.remove();
+      return Number.isFinite(px) ? px : 200;
+    }
+
     const observer = new IntersectionObserver(
       (entries) => {
         const visible = entries
@@ -33,8 +44,9 @@ export function CapabilityMap() {
         }
       },
       {
-        rootMargin: "-25% 0px -55% 0px",
-        threshold: [0.1, 0.25, 0.5],
+        // Prefer the section sitting just under sticky chrome + capability map
+        rootMargin: `-${Math.round(readAnchorOffset())}px 0px -45% 0px`,
+        threshold: [0, 0.1, 0.25],
       },
     );
 
@@ -43,7 +55,7 @@ export function CapabilityMap() {
   }, []);
 
   return (
-    <section className="sticky top-[var(--header-h)] z-40 border-b border-[color:var(--line)] bg-paper">
+    <section className="sticky top-[var(--chrome-h)] z-40 border-b border-[color:var(--line)] bg-paper">
       <Container className="px-0 sm:px-[clamp(20px,4vw,54px)]">
         <div className="flex overflow-x-auto md:grid md:grid-cols-[1fr_repeat(4,1fr)] md:overflow-visible">
           <p className="hidden items-center py-6 font-display text-[0.68rem] font-bold tracking-[0.12em] text-navy uppercase md:flex">

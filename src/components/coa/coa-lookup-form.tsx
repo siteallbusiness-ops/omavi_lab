@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 export function CoaLookupForm() {
   const [coaId, setCoaId] = useState("");
@@ -41,7 +42,12 @@ export function CoaLookupForm() {
           COA ID
         </label>
 
-        <div className="grid grid-cols-1 sm:grid-cols-[minmax(0,1fr)_auto]">
+        <div
+          className={cn(
+            "flex flex-col overflow-hidden rounded-md border border-white/25 bg-white/[0.06] transition-[border-color,box-shadow] sm:flex-row sm:items-stretch",
+            "focus-within:border-blue focus-within:shadow-[0_0_0_3px_rgba(30,91,217,0.35)]",
+          )}
+        >
           <input
             id="coa_id"
             name="coa_id"
@@ -50,14 +56,14 @@ export function CoaLookupForm() {
               setCoaId(event.target.value);
               setStatus("idle");
             }}
-            placeholder="Enter your COA ID"
+            placeholder="BTL-COA-2026-0001"
             autoComplete="off"
             spellCheck={false}
-            className="min-h-[52px] min-w-0 border border-white/35 bg-white/[0.06] px-[18px] font-display text-base text-white outline-none placeholder:text-white/42 focus:border-blue-mist sm:min-h-[58px] sm:border-r-0"
+            className="min-h-[52px] min-w-0 flex-1 border-0 bg-transparent px-[18px] font-display text-base text-white shadow-none outline-none ring-0 placeholder:text-white/40 focus:border-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 sm:min-h-[56px]"
           />
           <button
             type="submit"
-            className="flex min-h-[52px] w-full items-center justify-center gap-3 border border-blue-soft bg-blue-soft px-4 font-display text-[0.75rem] font-bold text-navy transition-colors hover:bg-white sm:min-h-[58px] sm:min-w-[116px] sm:justify-between sm:gap-5"
+            className="inline-flex min-h-[52px] shrink-0 items-center justify-center gap-2.5 border-t border-white/15 bg-blue-soft px-5 font-display text-[0.75rem] font-bold text-navy transition-colors hover:bg-white sm:min-h-[56px] sm:min-w-[132px] sm:justify-between sm:border-t-0 sm:border-l sm:border-white/15"
           >
             Search COA <span aria-hidden="true">→</span>
           </button>
@@ -69,13 +75,13 @@ export function CoaLookupForm() {
         </p>
 
         {status === "empty" ? (
-          <p className="mt-4 m-0 border border-white/20 bg-white/5 px-4 py-3 text-sm text-blue-mist">
+          <p className="mt-4 m-0 rounded-md border border-white/20 bg-white/5 px-4 py-3 text-sm text-blue-mist">
             Enter a COA ID to search the archive.
           </p>
         ) : null}
 
         {status === "not-found" ? (
-          <div className="mt-4 border border-white/20 bg-white/5 px-4 py-4">
+          <div className="mt-4 rounded-md border border-white/20 bg-white/5 px-4 py-4">
             <p className="m-0 font-display text-sm font-semibold text-white">
               No matching certificate
             </p>

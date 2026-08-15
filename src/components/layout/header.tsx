@@ -89,7 +89,7 @@ function MobileNavDna() {
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_100%_40%,rgba(30,91,217,0.06),transparent_55%)]" />
 
       <DnaStrandMark
-        uid="omavi-mnav-dna"
+        uid="biotech-mnav-dna"
         className="absolute top-[6%] right-[-10%] h-[min(88%,520px)] w-auto rotate-[18deg] opacity-[0.13]"
       />
     </div>
@@ -160,7 +160,7 @@ export function Header() {
         <div className="bg-[#050e1a] font-display text-[0.7rem] tracking-[0.08em] text-white/75 uppercase">
           <Container className="flex min-h-[31px] items-center justify-between gap-6 sm:min-h-[34px]">
             <p className="m-0 hidden truncate sm:block">
-              {site.tagline} · Singapore
+              {site.tagline}
             </p>
             <Link
               href="/coa-lookup"
@@ -176,7 +176,7 @@ export function Header() {
             <Brand
               inverted
               size="md"
-              className="relative z-[1] min-w-0 [&_img]:h-9 sm:[&_img]:h-11"
+              className="relative z-[1] min-w-0"
             />
 
             <button
@@ -332,10 +332,7 @@ export function Header() {
 
                 <div className="flex items-center justify-between gap-4">
                   <span className="truncate font-display text-[0.7rem] text-muted">
-                    omaviresearch.com
-                  </span>
-                  <span className="shrink-0 font-display text-[0.6rem] tracking-[0.1em] text-muted uppercase">
-                    Singapore
+                    {site.domain}
                   </span>
                 </div>
               </div>

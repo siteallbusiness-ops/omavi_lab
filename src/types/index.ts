@@ -4,6 +4,6 @@ export type AppConfig = {
 };
 
 export const appConfig: AppConfig = {
-  name: "Omavi Research",
+  name: "Biotech Laboratory",
   url: process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
 };

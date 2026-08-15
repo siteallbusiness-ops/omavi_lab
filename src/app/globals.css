@@ -36,8 +36,14 @@
   --gap-content: clamp(28px, 4vw, 48px);
   --eyebrow-gap: 1.25rem;
   --header-h: 82px;
-  --sticky-top: calc(var(--header-h) + 12px);
-  --scroll-margin: 110px;
+  --utility-h: 34px;
+  --chrome-h: calc(var(--header-h) + var(--utility-h));
+  --capability-map-h: 100px;
+  --sticky-top: calc(var(--chrome-h) + 12px);
+  /* Default anchors clear the sticky chrome */
+  --scroll-margin: calc(var(--chrome-h) + 16px);
+  /* Testing Techniques: chrome + capability map + breathing room */
+  --techniques-anchor: calc(var(--chrome-h) + var(--capability-map-h) + 20px);
 }
 
 @theme inline {
@@ -58,8 +64,8 @@
   --color-blue-hover: var(--blue-hover);
   --color-blue-soft: var(--blue-soft);
   --color-blue-mist: var(--blue-mist);
-  --font-sans: var(--font-dm-sans);
-  --font-display: var(--font-manrope);
+  --font-sans: var(--font-ibm-plex-sans);
+  --font-display: var(--font-space-grotesk);
   --shadow-elevated: var(--shadow);
 }
 
@@ -76,11 +82,17 @@ body {
     radial-gradient(900px 480px at 100% 0%, rgba(9, 22, 40, 0.05), transparent 50%),
     var(--background);
   color: var(--foreground);
-  font-family: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
   font-size: 16px;
   line-height: 1.55;
+  font-feature-settings: "ss01" on, "cv11" on;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+.font-display {
+  font-family: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "ss02" on;
 }
 
 #main-content {
@@ -116,26 +128,32 @@ body {
   scroll-margin-top: var(--scroll-margin);
 }
 
+.techniques-anchor {
+  scroll-margin-top: var(--techniques-anchor);
+}
+
 /* ——— Responsive rhythm ——— */
 @media (max-width: 1024px) {
   :root {
     --gap-hero: clamp(48px, 8vw, 80px);
     --gap-layout: clamp(40px, 7vw, 72px);
-    --scroll-margin: 120px;
   }
 }
 
 @media (max-width: 768px) {
   :root {
     --header-h: 74px;
+    --utility-h: 31px;
+    --capability-map-h: 64px;
     --page-hero-y: 58px 70px;
     --section-y: clamp(64px, 12vw, 96px);
     --section-y-compact: clamp(48px, 10vw, 80px);
     --gap-hero: 50px;
     --gap-layout: 42px;
     --gap-split: 36px;
-    --sticky-top: calc(var(--header-h) + 8px);
-    --scroll-margin: 100px;
+    --sticky-top: calc(var(--chrome-h) + 8px);
+    --scroll-margin: calc(var(--chrome-h) + 12px);
+    --techniques-anchor: calc(var(--chrome-h) + var(--capability-map-h) + 16px);
   }
 
   .page-hero h1 {

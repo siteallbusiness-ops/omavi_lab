@@ -1,14 +1,14 @@
 export const site = {
-  name: "Omavi Research",
-  shortName: "Omavi",
+  name: "Biotech Laboratory",
+  shortName: "Biotech",
   tagline: "Specialty analytical testing",
   description:
-    "Omavi Research provides identity, purity and quantity testing for peptides and specialty compounds, with clear reporting and public COA lookup.",
-  email: "hello@omaviresearch.com",
+    "Biotech Laboratory provides identity, purity and quantity testing for peptides and specialty compounds, with clear reporting and public COA lookup.",
+  email: "hello@biotechlaboratory.com",
+  domain: "biotechlaboratory.com",
   address: [
     "Laboratory address",
     "To be confirmed",
-    "Singapore",
   ] as const,
   year: 2026,
 } as const;

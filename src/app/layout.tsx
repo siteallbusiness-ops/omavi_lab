@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
-import { Manrope, DM_Sans } from "next/font/google";
+import { IBM_Plex_Sans, Space_Grotesk } from "next/font/google";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { site } from "@/lib/site";
 import "./globals.css";
 
-const manrope = Manrope({
-  variable: "--font-manrope",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
 
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
+const ibmPlexSans = IBM_Plex_Sans({
+  variable: "--font-ibm-plex-sans",
   subsets: ["latin"],
   weight: ["400", "500", "600"],
 });
@@ -29,15 +29,12 @@ export const metadata: Metadata = {
   ),
   icons: {
     icon: [
+      { url: "/icon.png", type: "image/png", sizes: "512x512" },
+      { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
       { url: "/favicon.ico", sizes: "any" },
-      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-      { url: "/favicon-48x48.png", sizes: "48x48", type: "image/png" },
-      { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
-      { url: "/favicon-192x192.png", sizes: "192x192", type: "image/png" },
-      { url: "/favicon.png", type: "image/png" },
     ],
     apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
-    shortcut: "/favicon.ico",
+    shortcut: [{ url: "/favicon.ico" }],
   },
   openGraph: {
     title: site.name,
@@ -46,18 +43,18 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/omavi-logo.webp",
-        width: 480,
-        height: 129,
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
         alt: site.name,
       },
     ],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: site.name,
     description: site.description,
-    images: ["/omavi-logo.webp"],
+    images: ["/og-image.png"],
   },
 };
 
@@ -65,7 +62,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${manrope.variable} ${dmSans.variable} h-full antialiased`}
+      className={`${spaceGrotesk.variable} ${ibmPlexSans.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col font-sans">
         <a

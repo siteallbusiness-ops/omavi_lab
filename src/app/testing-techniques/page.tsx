@@ -178,7 +178,7 @@ export default function TestingTechniquesPage() {
             <article
               key={technique.id}
               id={technique.id}
-              className="scroll-target grid grid-cols-[40px_minmax(0,1fr)] gap-x-5 gap-y-6 border-b border-[color:var(--line)] py-[clamp(3.5rem,8vw,7rem)] md:grid-cols-[72px_minmax(200px,0.7fr)_minmax(0,1.3fr)] md:gap-[clamp(2rem,6vw,5.5rem)]"
+              className="techniques-anchor grid grid-cols-[40px_minmax(0,1fr)] gap-x-5 gap-y-6 border-b border-[color:var(--line)] pt-[clamp(1.75rem,3.5vw,2.75rem)] pb-[clamp(3.5rem,8vw,7rem)] md:grid-cols-[72px_minmax(200px,0.7fr)_minmax(0,1.3fr)] md:gap-[clamp(2rem,6vw,5.5rem)]"
             >
               <div className="pt-1 font-display text-[0.68rem] font-bold tracking-[0.08em] text-muted">
                 {technique.index}
@@ -239,7 +239,7 @@ export default function TestingTechniquesPage() {
           {/* Screening */}
           <article
             id="screening"
-            className="scroll-target grid grid-cols-[40px_minmax(0,1fr)] gap-x-5 gap-y-6 border-b border-[color:var(--line)] py-[clamp(3.5rem,8vw,7rem)] md:grid-cols-[72px_minmax(200px,0.7fr)_minmax(0,1.3fr)] md:gap-[clamp(2rem,6vw,5.5rem)]"
+            className="techniques-anchor grid grid-cols-[40px_minmax(0,1fr)] gap-x-5 gap-y-6 border-b border-[color:var(--line)] pt-[clamp(1.75rem,3.5vw,2.75rem)] pb-[clamp(3.5rem,8vw,7rem)] md:grid-cols-[72px_minmax(200px,0.7fr)_minmax(0,1.3fr)] md:gap-[clamp(2rem,6vw,5.5rem)]"
           >
             <div className="pt-1 font-display text-[0.68rem] font-bold tracking-[0.08em] text-muted">
               04

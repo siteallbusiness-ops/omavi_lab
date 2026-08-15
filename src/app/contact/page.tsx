@@ -105,7 +105,7 @@ export default function ContactPage() {
 
             <div className="bg-navy p-5 text-white sm:p-[26px]">
               <p className="mb-4 font-display text-[0.64rem] font-bold tracking-[0.14em] text-blue-mist uppercase">
-                Singapore
+                Laboratory
               </p>
               <address className="mb-7 not-italic text-[0.83rem] leading-[1.7] text-white/68">
                 <strong className="block font-display font-semibold text-white">

@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { site } from "@/lib/site";
+import { cn } from "@/lib/utils";
 
 type FormState = {
   name: string;
@@ -14,6 +15,9 @@ type FormState = {
   question: string;
 };
 
+type FieldKey = keyof FormState;
+type FormErrors = Partial<Record<FieldKey, string>>;
+
 const initialState: FormState = {
   name: "",
   email: "",
@@ -24,6 +28,16 @@ const initialState: FormState = {
   timing: "",
   question: "",
 };
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const FIELD_ORDER: FieldKey[] = [
+  "name",
+  "email",
+  "compound",
+  "samples",
+  "question",
+];
 
 function buildEnquiryBody(data: FormState) {
   return [
@@ -40,33 +54,161 @@ function buildEnquiryBody(data: FormState) {
   ].join("\n");
 }
 
-const fieldClass =
-  "w-full min-h-[52px] rounded-none border border-[color:var(--line)] bg-white/62 px-[13px] py-3 text-[0.9rem] text-ink outline-none transition-[border-color,box-shadow] duration-150 placeholder:text-muted/55 focus:border-blue focus:shadow-[0_0_0_3px_rgba(30,91,217,0.1)]";
+function validateField(key: FieldKey, data: FormState): string | undefined {
+  switch (key) {
+    case "name":
+      if (!data.name.trim()) return "Name is required";
+      return undefined;
+    case "email":
+      if (!data.email.trim()) return "Email is required";
+      if (!EMAIL_PATTERN.test(data.email.trim())) return "Enter a valid email";
+      return undefined;
+    case "compound":
+      if (!data.compound.trim()) return "This field is required";
+      return undefined;
+    case "samples":
+      if (!data.samples.trim()) return undefined;
+      {
+        const samples = Number(data.samples);
+        if (!Number.isInteger(samples) || samples < 1) {
+          return "Enter a whole number of 1 or more";
+        }
+      }
+      return undefined;
+    case "question":
+      if (!data.question.trim()) return "This field is required";
+      if (data.question.trim().length < 20) return "Add a little more detail";
+      return undefined;
+    default:
+      return undefined;
+  }
+}
 
-const labelClass =
-  "mb-2 block text-[0.68rem] font-semibold text-ink-soft";
+function validateForm(data: FormState): FormErrors {
+  const errors: FormErrors = {};
+  for (const key of FIELD_ORDER) {
+    const message = validateField(key, data);
+    if (message) errors[key] = message;
+  }
+  return errors;
+}
+
+const fieldBase =
+  "w-full min-h-[52px] rounded-md border bg-white px-[13px] py-3 text-[0.9rem] text-ink outline-none transition-[border-color,box-shadow] duration-150 placeholder:text-muted/55 focus:shadow-[0_0_0_3px_rgba(30,91,217,0.12)]";
+
+const labelClass = "mb-2 block text-[0.68rem] font-semibold text-ink-soft";
+
+function FieldError({ id, message }: { id: string; message?: string }) {
+  if (!message) return null;
+  return (
+    <p
+      id={id}
+      className="mt-1.5 m-0 text-[0.72rem] leading-snug text-[#c2410c]"
+      role="alert"
+    >
+      {message}
+    </p>
+  );
+}
 
 export function ContactForm() {
+  const formId = useId();
   const [form, setForm] = useState<FormState>(initialState);
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [touched, setTouched] = useState<Partial<Record<FieldKey, boolean>>>(
+    {},
+  );
   const [copied, setCopied] = useState(false);
 
-  function update<K extends keyof FormState>(key: K, value: FormState[K]) {
-    setForm((current) => ({ ...current, [key]: value }));
+  function errorId(key: FieldKey) {
+    return `${formId}-${key}-error`;
+  }
+
+  function showError(key: FieldKey) {
+    return Boolean(touched[key] && errors[key]);
+  }
+
+  function update<K extends FieldKey>(key: K, value: FormState[K]) {
+    const next = { ...form, [key]: value };
+    setForm(next);
+
+    if (touched[key]) {
+      const message = validateField(key, next);
+      setErrors((current) => {
+        const nextErrors = { ...current };
+        if (message) nextErrors[key] = message;
+        else delete nextErrors[key];
+        return nextErrors;
+      });
+    }
+  }
+
+  function markTouched(key: FieldKey) {
+    setTouched((current) => ({ ...current, [key]: true }));
+    const message = validateField(key, form);
+    setErrors((current) => {
+      const nextErrors = { ...current };
+      if (message) nextErrors[key] = message;
+      else delete nextErrors[key];
+      return nextErrors;
+    });
+  }
+
+  function runValidation() {
+    const nextErrors = validateForm(form);
+    setErrors(nextErrors);
+    setTouched({
+      name: true,
+      email: true,
+      compound: true,
+      samples: true,
+      question: true,
+    });
+    return nextErrors;
+  }
+
+  function focusFirstError(nextErrors: FormErrors) {
+    const firstKey = FIELD_ORDER.find((key) => nextErrors[key]);
+    if (!firstKey) return;
+    const el = document.getElementById(`${formId}-${firstKey}`);
+    el?.focus();
+    el?.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 
   function prepareEmail(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const nextErrors = runValidation();
+    if (Object.keys(nextErrors).length > 0) {
+      focusFirstError(nextErrors);
+      return;
+    }
+
     const subject = encodeURIComponent(
-      `Testing enquiry — ${form.compound || "sample"}`,
+      `Testing enquiry — ${form.compound.trim()}`,
     );
     const body = encodeURIComponent(buildEnquiryBody(form));
     window.location.href = `mailto:${site.email}?subject=${subject}&body=${body}`;
   }
 
   async function copyEnquiry() {
+    const nextErrors = runValidation();
+    if (Object.keys(nextErrors).length > 0) {
+      focusFirstError(nextErrors);
+      return;
+    }
+
     await navigator.clipboard.writeText(buildEnquiryBody(form));
     setCopied(true);
     window.setTimeout(() => setCopied(false), 2000);
+  }
+
+  function fieldClass(key: FieldKey) {
+    return cn(
+      fieldBase,
+      showError(key)
+        ? "border-[#fdba74] focus:border-[#ea580c] focus:shadow-[0_0_0_3px_rgba(234,88,12,0.12)]"
+        : "border-[color:var(--line)] focus:border-blue",
+    );
   }
 
   return (
@@ -85,99 +227,175 @@ export function ContactForm() {
         </span>
       </div>
 
-      <form onSubmit={prepareEmail} className="grid gap-6">
+      <form onSubmit={prepareEmail} noValidate className="grid gap-6">
         <div className="grid gap-[22px] md:grid-cols-2">
-          <label className="block">
-            <span className={labelClass}>Name *</span>
+          <div>
+            <label htmlFor={`${formId}-name`} className={labelClass}>
+              Name *
+            </label>
             <input
-              required
+              id={`${formId}-name`}
+              name="name"
               autoComplete="name"
-              className={fieldClass}
+              aria-invalid={showError("name")}
+              aria-describedby={
+                showError("name") ? errorId("name") : undefined
+              }
+              className={fieldClass("name")}
               value={form.name}
               onChange={(e) => update("name", e.target.value)}
+              onBlur={() => markTouched("name")}
             />
-          </label>
-          <label className="block">
-            <span className={labelClass}>Email *</span>
+            <FieldError
+              id={errorId("name")}
+              message={showError("name") ? errors.name : undefined}
+            />
+          </div>
+
+          <div>
+            <label htmlFor={`${formId}-email`} className={labelClass}>
+              Email *
+            </label>
             <input
-              required
+              id={`${formId}-email`}
+              name="email"
               type="email"
               autoComplete="email"
-              className={fieldClass}
+              inputMode="email"
+              aria-invalid={showError("email")}
+              aria-describedby={
+                showError("email") ? errorId("email") : undefined
+              }
+              className={fieldClass("email")}
               value={form.email}
               onChange={(e) => update("email", e.target.value)}
+              onBlur={() => markTouched("email")}
             />
-          </label>
+            <FieldError
+              id={errorId("email")}
+              message={showError("email") ? errors.email : undefined}
+            />
+          </div>
         </div>
 
-        <label className="block">
-          <span className={labelClass}>Organisation</span>
+        <div>
+          <label htmlFor={`${formId}-organisation`} className={labelClass}>
+            Organisation
+          </label>
           <input
+            id={`${formId}-organisation`}
+            name="organisation"
             autoComplete="organization"
-            className={fieldClass}
+            className={fieldClass("organisation")}
             value={form.organisation}
             onChange={(e) => update("organisation", e.target.value)}
           />
-        </label>
+        </div>
 
         <div className="grid gap-[22px] md:grid-cols-2">
-          <label className="block">
-            <span className={labelClass}>Compound or product *</span>
+          <div>
+            <label htmlFor={`${formId}-compound`} className={labelClass}>
+              Compound or product *
+            </label>
             <input
-              required
+              id={`${formId}-compound`}
+              name="compound"
               placeholder="What needs to be measured?"
-              className={fieldClass}
+              aria-invalid={showError("compound")}
+              aria-describedby={
+                showError("compound") ? errorId("compound") : undefined
+              }
+              className={fieldClass("compound")}
               value={form.compound}
               onChange={(e) => update("compound", e.target.value)}
+              onBlur={() => markTouched("compound")}
             />
-          </label>
-          <label className="block">
-            <span className={labelClass}>Sample type / matrix</span>
+            <FieldError
+              id={errorId("compound")}
+              message={showError("compound") ? errors.compound : undefined}
+            />
+          </div>
+
+          <div>
+            <label htmlFor={`${formId}-matrix`} className={labelClass}>
+              Sample type / matrix
+            </label>
             <input
+              id={`${formId}-matrix`}
+              name="matrix"
               placeholder="e.g. powder, solution"
-              className={fieldClass}
+              className={fieldClass("matrix")}
               value={form.matrix}
               onChange={(e) => update("matrix", e.target.value)}
             />
-          </label>
+          </div>
         </div>
 
         <div className="grid gap-[22px] md:grid-cols-2">
-          <label className="block">
-            <span className={labelClass}>Number of samples</span>
+          <div>
+            <label htmlFor={`${formId}-samples`} className={labelClass}>
+              Number of samples
+            </label>
             <input
+              id={`${formId}-samples`}
+              name="samples"
               type="number"
               min={1}
+              step={1}
               inputMode="numeric"
-              className={fieldClass}
+              aria-invalid={showError("samples")}
+              aria-describedby={
+                showError("samples") ? errorId("samples") : undefined
+              }
+              className={fieldClass("samples")}
               value={form.samples}
               onChange={(e) => update("samples", e.target.value)}
+              onBlur={() => markTouched("samples")}
             />
-          </label>
-          <label className="block">
-            <span className={labelClass}>Required timing</span>
+            <FieldError
+              id={errorId("samples")}
+              message={showError("samples") ? errors.samples : undefined}
+            />
+          </div>
+
+          <div>
+            <label htmlFor={`${formId}-timing`} className={labelClass}>
+              Required timing
+            </label>
             <input
+              id={`${formId}-timing`}
+              name="timing"
               placeholder="Your preferred date or timeframe"
-              className={fieldClass}
+              className={fieldClass("timing")}
               value={form.timing}
               onChange={(e) => update("timing", e.target.value)}
             />
-          </label>
+          </div>
         </div>
 
-        <label className="block">
-          <span className={labelClass}>
+        <div>
+          <label htmlFor={`${formId}-question`} className={labelClass}>
             What should the result help you determine? *
-          </span>
+          </label>
           <textarea
-            required
+            id={`${formId}-question`}
+            name="question"
             rows={6}
             placeholder="Include the tests or outputs you expect, any known concentration range and relevant handling information."
-            className={`${fieldClass} min-h-[140px] resize-y`}
+            aria-invalid={showError("question")}
+            aria-describedby={
+              showError("question") ? errorId("question") : undefined
+            }
+            className={cn(fieldClass("question"), "min-h-[140px] resize-y")}
             value={form.question}
             onChange={(e) => update("question", e.target.value)}
+            onBlur={() => markTouched("question")}
           />
-        </label>
+          <FieldError
+            id={errorId("question")}
+            message={showError("question") ? errors.question : undefined}
+          />
+        </div>
 
         <div className="mt-2.5 grid items-center gap-6 border-t border-[color:var(--line)] pt-6 sm:gap-8 md:grid-cols-[1fr_auto]">
           <div>
