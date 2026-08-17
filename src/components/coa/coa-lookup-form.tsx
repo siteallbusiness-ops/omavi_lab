@@ -5,8 +5,8 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import {
   isCertificateNotFound,
-  normalizeCoaNumber,
   parseCertificateLookup,
+  parseCoaInput,
   withHiddenPdfToolbar,
   type CertificateLookupResult,
 } from "@/lib/coa";
@@ -14,7 +14,7 @@ import {
 export function CoaLookupForm() {
   const [coaId, setCoaId] = useState("");
   const [status, setStatus] = useState<
-    "idle" | "empty" | "loading" | "not-found" | "found" | "error"
+    "idle" | "empty" | "invalid" | "loading" | "not-found" | "found" | "error"
   >("idle");
   const [result, setResult] = useState<CertificateLookupResult | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
@@ -34,11 +34,11 @@ export function CoaLookupForm() {
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const value = coaId.trim();
-    if (!value) {
+    const parsedInput = parseCoaInput(coaId);
+    if (!parsedInput.ok) {
       setLookupResult(null);
       setErrorMessage("");
-      setStatus("empty");
+      setStatus(parsedInput.reason === "empty" ? "empty" : "invalid");
       return;
     }
 
@@ -53,7 +53,7 @@ export function CoaLookupForm() {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-        body: JSON.stringify({ coaNumber: value }),
+        body: JSON.stringify({ coaNumber: `BTL-${parsedInput.coaNumber}` }),
       });
 
       const contentType = response.headers.get("content-type") ?? "";
@@ -63,7 +63,7 @@ export function CoaLookupForm() {
       ) {
         const blob = await response.blob();
         const objectUrl = URL.createObjectURL(blob);
-        const coaNumber = normalizeCoaNumber(value);
+        const coaNumber = parsedInput.coaNumber;
         setLookupResult({
           coaNumber,
           viewUrl: objectUrl,
@@ -82,12 +82,16 @@ export function CoaLookupForm() {
       }
 
       if (!response.ok) {
+        if (response.status === 400) {
+          setStatus("invalid");
+          return;
+        }
         setErrorMessage(errorFromPayload(payload));
         setStatus("error");
         return;
       }
 
-      const parsed = parseCertificateLookup(payload, normalizeCoaNumber(value));
+      const parsed = parseCertificateLookup(payload, parsedInput.coaNumber);
       if (!parsed) {
         setStatus("not-found");
         return;
@@ -139,7 +143,7 @@ export function CoaLookupForm() {
               setLookupResult(null);
               setErrorMessage("");
             }}
-            placeholder="BTL- 260848"
+            placeholder="BTL-260848"
             autoComplete="off"
             spellCheck={false}
             disabled={status === "loading"}
@@ -161,7 +165,14 @@ export function CoaLookupForm() {
 
         {status === "empty" ? (
           <p className="mt-4 m-0 rounded-md border border-white/20 bg-white/5 px-4 py-3 text-sm text-blue-mist">
-            Enter a COA ID or report number to search the archive.
+            Enter a COA ID to search the archive.
+          </p>
+        ) : null}
+
+        {status === "invalid" ? (
+          <p className="mt-4 m-0 rounded-md border border-white/20 bg-white/5 px-4 py-3 text-sm text-blue-mist">
+            Enter a valid COA ID. IDs start with BTL- followed by the report
+            number, for example BTL-260848.
           </p>
         ) : null}
 

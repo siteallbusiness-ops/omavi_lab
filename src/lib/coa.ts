@@ -1,4 +1,26 @@
+const COA_ID_PATTERN = /^BTL-\s*\d+$/i;
+
+export type CoaParseResult =
+  | { ok: true; coaNumber: string }
+  | { ok: false; reason: "empty" | "invalid" };
+
+export function parseCoaInput(input: string): CoaParseResult {
+  const trimmed = input.trim();
+  if (!trimmed) return { ok: false, reason: "empty" };
+  if (!COA_ID_PATTERN.test(trimmed)) {
+    return { ok: false, reason: "invalid" };
+  }
+
+  return {
+    ok: true,
+    coaNumber: trimmed.replace(/^BTL-\s*/i, ""),
+  };
+}
+
 export function normalizeCoaNumber(input: string): string {
+  const parsed = parseCoaInput(input);
+  if (parsed.ok) return parsed.coaNumber;
+
   const trimmed = input.trim();
   if (!trimmed) return "";
 

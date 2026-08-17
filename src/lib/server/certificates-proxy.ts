@@ -1,4 +1,4 @@
-import { normalizeCoaNumber } from "@/lib/coa";
+import { parseCoaInput } from "@/lib/coa";
 
 const DEFAULT_API_ORIGIN = "https://api.omavilabs.com";
 const UPSTREAM_TIMEOUT_MS = 25_000;
@@ -226,16 +226,22 @@ async function readLookupBody(request: Request): Promise<{ body: string; error?:
       : typeof record.coaId === "string"
         ? record.coaId
         : "";
-  const coaNumber = normalizeCoaNumber(raw);
+  const parsed = parseCoaInput(raw);
 
-  if (!coaNumber) {
-    return { body: "", error: "A COA number is required." };
+  if (!parsed.ok) {
+    return {
+      body: "",
+      error:
+        parsed.reason === "empty"
+          ? "A COA number is required."
+          : "Enter a valid COA ID starting with BTL-.",
+    };
   }
 
   return {
     body: JSON.stringify({
       ...record,
-      coaNumber,
+      coaNumber: parsed.coaNumber,
     }),
   };
 }
