@@ -105,10 +105,7 @@ export function CoaLookupForm() {
 
   return (
     <div className="bg-navy text-white shadow-elevated">
-      <div className="flex flex-col gap-1 border-b border-white/14 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-5 sm:px-[26px] sm:py-[22px]">
-        <span className="font-display text-[0.65rem] font-bold tracking-[0.09em] text-blue-mist uppercase">
-          Public lookup
-        </span>
+      <div className="border-b border-white/14 px-5 py-5 sm:px-[26px] sm:py-[22px]">
         <strong className="font-display text-[0.86rem] font-semibold text-white">
           Find a certificate
         </strong>
