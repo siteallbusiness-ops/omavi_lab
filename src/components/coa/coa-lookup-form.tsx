@@ -39,7 +39,7 @@ export function CoaLookupForm() {
           htmlFor="coa_id"
           className="mb-[11px] block text-[0.66rem] font-semibold tracking-[0.09em] text-white/74 uppercase"
         >
-          COA ID
+          COA ID / Report Number
         </label>
 
         <div
@@ -56,7 +56,7 @@ export function CoaLookupForm() {
               setCoaId(event.target.value);
               setStatus("idle");
             }}
-            placeholder="BTL-COA-2026-0001"
+            placeholder="BTL- 260848"
             autoComplete="off"
             spellCheck={false}
             className="min-h-[52px] min-w-0 flex-1 border-0 bg-transparent px-[18px] font-display text-base text-white shadow-none outline-none ring-0 placeholder:text-white/40 focus:border-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 sm:min-h-[56px]"
@@ -70,13 +70,12 @@ export function CoaLookupForm() {
         </div>
 
         <p className="mt-3 m-0 text-[0.67rem] text-white/45">
-          Use letters, numbers, underscores or hyphens as printed on the
-          certificate.
+          Enter the COA ID or report number as printed on the certificate.
         </p>
 
         {status === "empty" ? (
           <p className="mt-4 m-0 rounded-md border border-white/20 bg-white/5 px-4 py-3 text-sm text-blue-mist">
-            Enter a COA ID to search the archive.
+            Enter a COA ID or report number to search the archive.
           </p>
         ) : null}
 
