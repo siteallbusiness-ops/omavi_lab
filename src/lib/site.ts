@@ -4,11 +4,13 @@ export const site = {
   tagline: "Specialty analytical testing",
   description:
     "Biotech Laboratory provides identity, purity and quantity testing for peptides and specialty compounds, with clear reporting and public COA lookup.",
-  email: "hello@biotechlaboratory.com",
-  domain: "biotechlaboratory.com",
+  email: "contact@biotech-laboratory.com",
+  domain: "biotech-laboratory.com",
   address: [
-    "Laboratory address",
-    "To be confirmed",
+    "2500 CityWest Boulevard",
+    "Suite 300",
+    "Houston, TX 77042",
+    "United States",
   ] as const,
   year: 2026,
 } as const;
