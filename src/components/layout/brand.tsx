@@ -6,18 +6,19 @@ import { cn } from "@/lib/utils";
 type BrandSize = "sm" | "md" | "lg";
 
 export function BrandMark({ className }: { className?: string }) {
-  return <LogoMark className={cn("size-9 rounded-md", className)} />;
+  return <LogoMark className={className} />;
 }
 
 export function Brand({
   className,
-  inverted = true,
   size = "md",
+  priority = false,
 }: {
   className?: string;
-  /** White wordmark on dark chrome; navy wordmark on light surfaces. */
+  /** Kept for existing call sites; lockup is designed for dark chrome. */
   inverted?: boolean;
   size?: BrandSize;
+  priority?: boolean;
 }) {
   return (
     <Link
@@ -25,7 +26,7 @@ export function Brand({
       className={cn("inline-flex min-w-0 items-center no-underline", className)}
       aria-label={`${site.name} home`}
     >
-      <Logo inverted={inverted} size={size} />
+      <Logo size={size} priority={priority} />
     </Link>
   );
 }

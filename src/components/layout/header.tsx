@@ -176,6 +176,7 @@ export function Header() {
             <Brand
               inverted
               size="md"
+              priority
               className="relative z-[1] min-w-0"
             />
 

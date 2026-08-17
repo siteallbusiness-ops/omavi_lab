@@ -33,17 +33,9 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Brand assets
 
-In-app logo: `src/components/layout/logo.tsx` (SVG mark + Space Grotesk wordmark).
+Official lockup: `public/biotech-logo.png` (header & footer). Mark: `public/brand-mark.png`.
 
 Typography: **Space Grotesk** (display) + **IBM Plex Sans** (body).
-
-Favicons / OG (regenerate after mark changes):
-
-```bash
-node scripts/generate-brand-assets.mjs
-```
-
-Writes `src/app/icon.png`, `src/app/apple-icon.png`, `public/favicon.ico`, and `public/og-image.png`.
 
 ## Project structure
 
