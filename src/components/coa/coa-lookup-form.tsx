@@ -7,6 +7,7 @@ import {
   isCertificateNotFound,
   normalizeCoaNumber,
   parseCertificateLookup,
+  withHiddenPdfToolbar,
   type CertificateLookupResult,
 } from "@/lib/coa";
 
@@ -229,7 +230,7 @@ export function CoaLookupForm() {
                     />
                   ) : (
                     <iframe
-                      src={result.viewUrl}
+                      src={withHiddenPdfToolbar(result.viewUrl)}
                       title={`Certificate ${result.coaNumber}`}
                       className="h-[min(70vh,520px)] w-full border-0"
                     />

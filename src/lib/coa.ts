@@ -180,6 +180,18 @@ function fallbackFileUrl(coaNumber: string): string | null {
   return `/api/certificates/${encodeURIComponent(coaNumber)}/pdf`;
 }
 
+/** Hides Chrome's built-in PDF Drive / download / print toolbar in the viewer. */
+export function withHiddenPdfToolbar(url: string): string {
+  const flags = "toolbar=0&navpanes=0";
+  const hashIndex = url.indexOf("#");
+  if (hashIndex === -1) return `${url}#${flags}`;
+
+  const base = url.slice(0, hashIndex);
+  const hash = url.slice(hashIndex + 1);
+  if (/(?:^|&)toolbar=/.test(hash)) return url;
+  return `${base}#${hash ? `${hash}&` : ""}${flags}`;
+}
+
 export function parseCertificateLookup(
   payload: unknown,
   requestedCoa: string,
