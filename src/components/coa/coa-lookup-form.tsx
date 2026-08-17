@@ -7,9 +7,9 @@ import {
   isCertificateNotFound,
   parseCertificateLookup,
   parseCoaInput,
-  withHiddenPdfToolbar,
   type CertificateLookupResult,
 } from "@/lib/coa";
+import { CertificatePreview } from "@/components/coa/certificate-preview";
 
 export function CoaLookupForm() {
   const [coaId, setCoaId] = useState("");
@@ -228,21 +228,11 @@ export function CoaLookupForm() {
                     </a>
                   ) : null}
                 </div>
-                <div className="mt-4 overflow-hidden rounded-md bg-white">
-                  {result.previewKind === "image" ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={result.viewUrl}
-                      alt={`Certificate ${result.coaNumber}`}
-                      className="h-auto w-full"
-                    />
-                  ) : (
-                    <iframe
-                      src={withHiddenPdfToolbar(result.viewUrl)}
-                      title={`Certificate ${result.coaNumber}`}
-                      className="h-[min(70vh,520px)] w-full border-0"
-                    />
-                  )}
+                <div className="mt-4">
+                  <CertificatePreview
+                    src={result.viewUrl}
+                    title={`Certificate ${result.coaNumber}`}
+                  />
                 </div>
               </>
             ) : (
